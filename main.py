@@ -1,6 +1,8 @@
 import subprocess
 import glob
 
+from result_printer import Result_Printer
+
 def execute_script(script_path) : 
     paths = glob.glob('target/' + script_path)
 
@@ -25,18 +27,23 @@ def read_names():
     except FileNotFoundError :
         print(f"Error: File name not found.")
         return False
+    
 
 def main() :
-    solution = subprocess.run(['python', 'solution.py'], capture_output=True, shell=True, text=True).stdout
+    rp = Result_Printer();
+    rp.generate_result();
+    # solution = subprocess.run(['python', 'solution.py'], capture_output=True, shell=True, text=True).stdout
 
-    names = read_names()    
-    for name in names :
-        result = execute_script("*{}*.py".format(name))
-        if solution == result :
-            print(f"{name} : O)")
-        else :
-            print(f"{name} : X)")
-            print(result)
+    # names = read_names()    
+    # for name in names :
+    #     result = execute_script("*{}*.py".format(name))
+    #     if solution == result :
+    #         print(f"{name} : O)")
+    #     else :
+    #         print(f"{name} : X)")
+    #         print(result)
+
+
 
 
 # ======================
