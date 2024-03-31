@@ -4,8 +4,7 @@ from result_printer import Result_Printer
 
 def main() :
     names = File_Organizer.run()
-    ev = Evaluator(names);
-    rp = Result_Printer(results=ev.evaluate());
-    rp.generate_result();
+    eval_result = Evaluator.run(names);
+    Result_Printer.run(eval_result);
 
 main()

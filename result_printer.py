@@ -5,24 +5,31 @@ MESSAGES = {
 }
 
 class Result_Printer :
-    def __init__(self, results) :
-        self.file = open("result.md", "w", encoding="utf-8")
-        self.results = results
+    __result_file = open("result.md", "w", encoding="utf-8")
+    __eval_results = ''
 
-    def generate_result(self) :
-        self.printOnFile(MESSAGES["heading"])
-        self.printOnFile(MESSAGES["cl"])
-        self.printOnFile(MESSAGES["tableheader"])
+    @staticmethod
+    def run(eval_results) :
+        Result_Printer.__eval_results = eval_results
+        Result_Printer._generate_result()
+
+    @staticmethod
+    def _generate_result() :
+        Result_Printer._printOnFile(MESSAGES["heading"])
+        Result_Printer._printOnFile(MESSAGES["cl"])
+        Result_Printer._printOnFile(MESSAGES["tableheader"])
         
-        for res in self.results :
-            self.printOnFile(self.printResultRow(res))
+        for res in Result_Printer.__eval_results :
+            Result_Printer._printOnFile(Result_Printer._generateResultRow(res))
 
-        self.file.close()
+        Result_Printer.__result_file.close()
 
-    def printOnFile(self, str) :
-        print(str, file=self.file)
+    @staticmethod
+    def _printOnFile(str) :
+        print(str, file=Result_Printer.__result_file)
 
-    def printResultRow(self, result) :
+    @staticmethod
+    def _generateResultRow(result) :
         res_row = "|{}|{}".format('20191599', result['name'])
         correct, reason = result['result'];
         
