@@ -2,7 +2,7 @@ import sys
 import glob
 import os
 
-from setting import SRC_PATH
+from utils.common import SRC_PATH, y_or_n_input
 
 class File_Organizer :
     __names = []
@@ -53,9 +53,8 @@ class File_Organizer :
 
     @staticmethod
     def _get_arguments() :
-        gonna_delete = input("[Y/N] 과제 파일 정리를 시작하시겠습니까? ")
-        gonna_delete = True if gonna_delete.lower() == 'y' else False
 
+        gonna_delete = y_or_n_input("과제 파일 정리를 시작하시겠습니까?")
         if not gonna_delete : return False
 
         File_Organizer.__total = int(input("문제의 총 개수를 입력해 주세요. "))
