@@ -2,15 +2,15 @@ import subprocess
 import glob
 import sys
 
-from utils.common import SRC_PATH, y_or_n_input
+from utils.common import SRC_PATH
 
 class Evaluator :
-    def __init__(self, names):
-        self.ignore_space = self.check_ignore_space() # execute_solution에서 ignore_space 확인하므로 필히 먼저 실행!
-        self.essentials = self.check_essentials()
-        self.forbiddens = self.check_forbiddens()
+    def __init__(self, ids, ignore_space_flag, essentials, forbiddens ):
+        self.ignore_space_flag = ignore_space_flag
+        self.essentials = essentials
+        self.forbiddens = forbiddens
 
-        self.names = names
+        self.ids = ids
         self.solution = self.execute_solution()
         self.evaluations = None
 
@@ -20,9 +20,9 @@ class Evaluator :
 
     def evaluate(self) :
         self.evaluations = []
-        for name in self.names :
-            exec_res = self.execute_script(name)
-            self.evaluations.append({ 'name' : name, 'result' : exec_res})
+        for id in self.ids :
+            exec_res = self.execute_script(id)
+            self.evaluations.append({ 'id' : id, 'result' : exec_res})
     
     def execute_solution(self) :
         solution_file = glob.glob(SRC_PATH['solution'])
@@ -34,8 +34,8 @@ class Evaluator :
         exec_result = subprocess.run(['python', solution_file[0]], capture_output=True, shell=True, text=True)
         return self.space_filter(exec_result)
     
-    def execute_script(self, name) :
-        path = glob.glob(SRC_PATH['target'](name))
+    def execute_script(self, id) :
+        path = glob.glob(SRC_PATH['target'](id))
 
         if len(path) == 1 :
             exec_result = subprocess.run(['python', path[0]], capture_output=True, shell=True, text=True)
@@ -43,7 +43,7 @@ class Evaluator :
         elif len(path) == 0 :
             return (False, "미제출")
         else :
-            return (False, "동일한 이름 한개 이상 존재")
+            return (False, "동일한 id의 파일이 한개 이상 존재")
         
     def compare_to_solution(self, exec_result, path) :
         if self.solution != exec_result : return (False, "출력 결과 오류")
@@ -59,17 +59,8 @@ class Evaluator :
 
         return (True, "")
         
-    def check_ignore_space (self) :
-        return y_or_n_input("채점 시 띄어쓰기를 무시하시겠습니까?")
-    
-    def check_essentials (self) :
-        return input("[필수1,필수2,...] 필수어를 입력해주세요. (없으면 Enter) ").split(',')
-    
-    def check_forbiddens (self) :
-        return input("[금지1,금지2,...] 금지어를 입력해주세요. (없으면 Enter) ").split(',')
-        
     def space_filter(self, exec_result) :
-        if self.ignore_space : 
+        if self.ignore_space_flag : 
             return exec_result.stdout.replace(" ", "")
         else :
             return exec_result.stdout

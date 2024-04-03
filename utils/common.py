@@ -1,11 +1,14 @@
 SRC_PATH = {
-    'names' : 'src/names.txt',
+    'ids' : 'src/ids.txt',
     'solution' : 'src/solution.py',
-    'target': lambda name: f"target/*{name}*.py",
+    'target': lambda id: f"target/*{id}*.py",
 }
 
-def y_or_n_input (str) :
-    while True :
-        check_ignore_space = input(f"[Y/N] {str} ").lower()
-        if check_ignore_space == 'y' : return True
-        elif check_ignore_space == 'n' : return False
+MESSAGES = {
+    'check_delete_file' : '과제 파일 정리를 진행하시겠습니까?',
+    'get_total_problem' : '문제의 총 개수를 입력해 주세요.',
+    'get_target_problem' : '평가할 문제 번호를 입력해 주세요.',
+    'check_ignore_space' : '채점 시 띄어쓰기를 무시하겠습니까?',
+    'get_essentials' :  "[필수1,필수2,...] 필수어를 입력해주세요. (없으면 Enter) ",
+    'get_forbiddens' : "[금지1,금지2,...] 금지어를 입력해주세요. (없으면 Enter) ",
+}

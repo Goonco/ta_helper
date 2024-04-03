@@ -1,7 +1,7 @@
 MESSAGES = {
     'heading' : "### 채점 결과 ♪(^∇^\*)",
     'cl' : "<br/>\n",
-    'tableheader' : "|   학번   |  성명  | 결과 |   비고    |\n| :------: | :----: | :--: | :-------: |"
+    'tableheader' : "|   학번   | 결과 |   비고    |\n| :------: | :--: | :-------: |"
 }
 
 class Result_Printer :
@@ -30,7 +30,7 @@ class Result_Printer :
 
     @staticmethod
     def _generateResultRow(result) :
-        res_row = "|{}|{}".format('20191599', result['name'])
+        res_row = "|{}".format(result['id'])
         correct, reason = result['result'];
         
         if correct :
