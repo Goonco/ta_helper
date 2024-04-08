@@ -35,7 +35,7 @@ class File_Organizer :
             selection = int(input("평가할 파일을 선택해 주세요. "))
 
         for i in range(p_len) :
-            if i == selection - 1 : continue
+            if i == selection : continue
             os.remove(paths[i])
     
     def _read_ids(self):
@@ -48,3 +48,14 @@ class File_Organizer :
             print(f"name.txt 파일이 존재하지 않습니다. 자세한 내용은 ReadMe를 확인해 주세요.")
             sys.exit(-1)
 
+    def feedback_ids(self,eval_result) : 
+        print(eval_result)
+        try :
+            with open(SRC_PATH['ids'], 'w', encoding='utf-8') as f:
+                for res in eval_result :
+                    if not res['result'][0] :
+                        print(res['id'], file=f)
+        
+        except FileNotFoundError :
+            print(f"name.txt 파일이 존재하지 않습니다. 자세한 내용은 ReadMe를 확인해 주세요.")
+            sys.exit(-1)

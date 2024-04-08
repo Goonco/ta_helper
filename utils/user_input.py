@@ -23,6 +23,10 @@ class User_Input :
         self.essentials = None
         self.forbiddens = None
 
+        self.inputs = ""
+
+        self.feedback_id_flag = False
+
         self.run()
 
     def run(self) :
@@ -31,6 +35,7 @@ class User_Input :
         self._check_ignore_space()
         self._get_essentials()
         self._get_forbiddens()
+        self._get_inputs()
 
     def _check_delete_file(self) :
         self.delete_file_flag = y_or_n_input(MESSAGES['check_delete_file'])
@@ -47,6 +52,15 @@ class User_Input :
     
     def _get_forbiddens(self) :
         self.forbiddens = input(MESSAGES['get_forbiddens']).split(',')
+
+    def _get_inputs(self) :
+        input_list = input(MESSAGES['get_inputs']).split(',')
+        for inp in input_list :
+            self.inputs += inp + "\n"
+
+    def check_feedback_id(self) :
+        self.feedback_id_flag = y_or_n_input(MESSAGES['check_feedback_id'])
+
 
 
 
