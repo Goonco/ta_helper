@@ -6,22 +6,21 @@ import time
 from utils.common import SRC_PATH
 
 class Evaluator :
-    def __init__(self, ids, ignore_space_flag, essentials, forbiddens, inputs ):
-        self.inputs = inputs
+    def __init__(self, ids, inputs ):
+        self.inputs = inputs.inputs
 
-        self.ignore_space_flag = ignore_space_flag
-        self.essentials = essentials
-        self.forbiddens = forbiddens
+        self.ignore_space_flag = inputs.ignore_space_flag
+        self.essentials = inputs.essentials
+        self.forbiddens = inputs.forbiddens
 
         self.ids = ids
         self.solution = self.execute_solution()
         self.evaluations = None
+        self.fail_results = []
 
         self.time_out = 5
 
-    def run(self) :
-        self.evaluate();
-        return self.evaluations
+        self.evaluate()
 
     def evaluate(self) :
         self.evaluations = []
@@ -63,14 +62,16 @@ class Evaluator :
             if force_break_flag : return (False, "시간 초과")
             exec_result, _ = process.communicate()
 
-            return self.compare_to_solution(self.space_filter(exec_result), path[0])
+            return self.compare_to_solution(self.space_filter(exec_result), path[0], id)
         elif len(path) == 0 :
             return (False, "미제출")
         else :
             return (False, "동일한 id의 파일이 한개 이상 존재")
         
-    def compare_to_solution(self, exec_result, path) :
-        if self.solution != exec_result : return (False, "출력 결과 오류")
+    def compare_to_solution(self, exec_result, path, id) :
+        if self.solution != exec_result :
+            self.fail_results.append({'id' : id, 'result' : exec_result})
+            return (False, "출력 결과 오류")
 
         with open(path, "r", encoding="utf-8") as file:
             file_str = file.read()
