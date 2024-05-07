@@ -26,7 +26,7 @@ class Evaluator :
         self.evaluations = []
         for id in self.ids :
             exec_res = self.execute_script(id)
-            self.evaluations.append({ 'id' : id, 'result' : exec_res})
+            self.evaluations.append({ 'id' : id, 'result' : exec_res })
     
     def execute_solution(self) :
         solution_file = glob.glob(SRC_PATH['solution'])

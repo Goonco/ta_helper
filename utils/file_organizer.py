@@ -32,7 +32,7 @@ class File_Organizer :
                 options += f"{i+1}. {paths[i][7:]}\t"
             print(options)
 
-            selection = int(input("평가할 파일을 선택해 주세요. "))
+            selection = int(input("평가할 파일을 선택해 주세요. ")) - 1
 
         for i in range(p_len) :
             if i == selection : continue
@@ -49,7 +49,7 @@ class File_Organizer :
             sys.exit(-1)
 
     def feedback_ids(self,eval_result) : 
-        print(eval_result)
+        # print(eval_result)
         try :
             with open(SRC_PATH['ids'], 'w', encoding='utf-8') as f:
                 for res in eval_result :

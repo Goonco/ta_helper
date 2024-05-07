@@ -12,6 +12,6 @@ def main() :
     Result_Printer.run(evaluator);
 
     inputs.check_feedback_id()
-    if inputs.feedback_id_flag : file_organizer.feedback_ids(ids)
+    if inputs.feedback_id_flag : file_organizer.feedback_ids(evaluator.evaluations)
 
 main()
