@@ -7,6 +7,8 @@ from utils.common import SRC_PATH
 
 class Evaluator :
     def __init__(self, ids, inputs ):
+        self.max_iteration = inputs.iteration
+        self.current_iter = 0
         self.inputs = inputs.inputs
 
         self.ignore_space_flag = inputs.ignore_space_flag
@@ -14,8 +16,8 @@ class Evaluator :
         self.forbiddens = inputs.forbiddens
 
         self.ids = ids
-        self.solution = self.execute_solution()
-        self.evaluations = None
+        self.solution = []
+        self.evaluations = []
         self.fail_results = []
 
         self.time_out = 5
@@ -23,10 +25,17 @@ class Evaluator :
         self.evaluate()
 
     def evaluate(self) :
-        self.evaluations = []
-        for id in self.ids :
-            exec_res = self.execute_script(id)
-            self.evaluations.append({ 'id' : id, 'result' : exec_res })
+        while self.current_iter != self.max_iteration :
+            self.solution.append(self.execute_solution())
+            self.fail_results.append([])
+            self.evaluations.append([])
+            
+            for id in self.ids :
+                exec_res = self.execute_script(id)
+                self.evaluations[self.current_iter].append({ 'id' : id, 'result' : exec_res })
+            
+            self.current_iter += 1
+        # print("####", len(self.evaluations[0]))
     
     def execute_solution(self) :
         solution_file = glob.glob(SRC_PATH['solution'])
@@ -35,7 +44,7 @@ class Evaluator :
             print(f"solution.py 파일이 존재하지 않습니다. 자세한 내용은 ReadMe를 확인해 주세요.")
             sys.exit(-1)
         
-        exec_result = subprocess.run(['python', solution_file[0]], input=self.inputs, capture_output=True, shell=True, text=True)
+        exec_result = subprocess.run(['python', solution_file[0]], input=self.inputs[self.current_iter], capture_output=True, shell=True, text=True)
         return self.space_filter(exec_result.stdout)
     
     def execute_script(self, id) :
@@ -43,7 +52,7 @@ class Evaluator :
 
         if len(path) == 1 :
             process = subprocess.Popen(['python', path[0]], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, shell=True)
-            for inp in self.inputs :
+            for inp in self.inputs[self.current_iter] :
                 process.stdin.write(inp)
             process.stdin.close()
             start_time = time.time()
@@ -69,8 +78,8 @@ class Evaluator :
             return (False, "동일한 id의 파일이 한개 이상 존재")
         
     def compare_to_solution(self, exec_result, path, id) :
-        if self.solution != exec_result :
-            self.fail_results.append({'id' : id, 'result' : exec_result})
+        if self.solution[self.current_iter] != exec_result :
+            self.fail_results[self.current_iter].append({'id' : id, 'result' : exec_result})
             return (False, "출력 결과 오류")
 
         with open(path, "r", encoding="utf-8") as file:

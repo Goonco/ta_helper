@@ -9,6 +9,7 @@ def main() :
     ids = file_organizer.run()
 
     evaluator = Evaluator(ids, inputs);
+
     Result_Printer.run(evaluator);
 
     inputs.check_feedback_id()

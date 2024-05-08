@@ -9,9 +9,10 @@ def y_or_n_input (msg) :
 def number_input (msg) :
     while True :
         try :
-            return int(input(f"[Number] {msg} "))
+            inp = int(input(f"[Number] {msg} "))
+            if inp > 0 : return inp
         except ValueError :
-            print("숫자를 입력해 주세요.")
+            print("1 이상의 숫자를 입력해 주세요.")
 
 class User_Input :
     def __init__(self) :
@@ -23,7 +24,8 @@ class User_Input :
         self.essentials = None
         self.forbiddens = None
 
-        self.inputs = ""
+        self.iteration = 1
+        self.inputs = []
 
         self.feedback_id_flag = False
 
@@ -35,6 +37,7 @@ class User_Input :
         self._check_ignore_space()
         self._get_essentials()
         self._get_forbiddens()
+        self._get_iteration()
         self._get_inputs()
 
     def _check_delete_file(self) :
@@ -52,11 +55,16 @@ class User_Input :
     
     def _get_forbiddens(self) :
         self.forbiddens = input(MESSAGES['get_forbiddens']).split(',')
+    
+    def _get_iteration(self) :
+        self.iteration = number_input(MESSAGES['get_iteration'])
 
     def _get_inputs(self) :
-        input_list = input(MESSAGES['get_inputs']).split(',')
-        for inp in input_list :
-            self.inputs += inp + "\n"
+        for i in range(self.iteration) :
+            single_input = ""
+            for inp in input(MESSAGES['get_inputs'](i+1)).split(',') :
+                single_input += inp + "\n"
+            self.inputs.append(single_input)
 
     def check_feedback_id(self) :
         self.feedback_id_flag = y_or_n_input(MESSAGES['check_feedback_id'])

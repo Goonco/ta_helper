@@ -49,12 +49,18 @@ class File_Organizer :
             sys.exit(-1)
 
     def feedback_ids(self,eval_result) : 
-        # print(eval_result)
+        remain_ids = []
+
+        for iter in range(len(eval_result[0])) :
+            for iter2 in range(len(eval_result)) :
+                if not eval_result[iter2][iter]['result'][0] :
+                    remain_ids.append(eval_result[iter2][iter]['id'])
+                    break
+
         try :
             with open(SRC_PATH['ids'], 'w', encoding='utf-8') as f:
-                for res in eval_result :
-                    if not res['result'][0] :
-                        print(res['id'], file=f)
+                for id in remain_ids :
+                    print(id, file=f)
         
         except FileNotFoundError :
             print(f"name.txt 파일이 존재하지 않습니다. 자세한 내용은 ReadMe를 확인해 주세요.")

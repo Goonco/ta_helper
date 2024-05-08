@@ -13,7 +13,8 @@ MESSAGES = {
     'get_essentials' :  '[필수1,필수2,...] 필수어를 입력해주세요. (없으면 Enter) : ',
     'get_forbiddens' : '[금지1,금지2,...] 금지어를 입력해주세요. (없으면 Enter) : ',
 
-    'get_inputs' : '[입력1,입력2,...] 실행 시 입력값을 입력해주세요. (없으면 Enter) : ',
+    'get_iteration' : '반복 실행 횟수를 입력해주세요.',
+    'get_inputs' : lambda iter : f'#{iter} [입력1,입력2,...] 실행 시 입력값을 입력해주세요. (없으면 Enter) : ',
 
     'check_feedback_id' : '정답 처리된 id를 제외하도록 ids.txt를 업데이트하시겠습니까?'
 }
